@@ -11,7 +11,7 @@ export function useImxBalance(provider: EIP1193Provider, address: string) {
     if (!provider || !address) return;
     setLoading(true);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (provider as any).request({ method: 'eth_getBalance', params: [address, 'latest'] })
+    provider.send('eth_getBalance', [address, 'latest'])
       .then((balance: string) => {
         setImxBalance(new BigNumber(balance))
         setLoading(false);

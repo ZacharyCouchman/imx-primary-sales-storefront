@@ -1,7 +1,7 @@
-import { Provider } from "@imtbl/sdk/passport";
+import { BrowserProvider } from "ethers";
 
-export async function getImxBalance(zkEVMProvider: Provider) {
-  const getBalanceResponse = await zkEVMProvider.request({ method: 'eth_getBalance' });
+export async function getImxBalance(provider: BrowserProvider) {
+  const getBalanceResponse = await provider.send('eth_getBalance', []);
   console.log("get balance response: ", getBalanceResponse);
   return getBalanceResponse;
 }

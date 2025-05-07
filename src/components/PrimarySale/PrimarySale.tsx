@@ -2,12 +2,12 @@ import { Button, Card, CardBody, CardFooter, Image as ChakraImage, Flex, HStack,
 import { useContext, useState } from "react";
 import { EIP1193Context } from "../../contexts/EIP1193Context";
 import { CheckoutContext } from "../../contexts/CheckoutContext";
-import { ProductWithMetadata } from "../../types/product";
-import { SaleWidgetParams, WidgetType } from "@imtbl/sdk/checkout";
+import { SalePaymentTypes, SaleWidgetParams, WidgetType } from "@imtbl/sdk/checkout";
 import config, { applicationEnvironment } from "../../config/config";
+import { SimplifiedProduct } from "../../types/type";
 
 interface PrimarySale {
-  product: ProductWithMetadata;
+  product: SimplifiedProduct;
 }
 export function PrimarySale({product}: PrimarySale) {
   const {walletAddress, provider} = useContext(EIP1193Context);
@@ -29,19 +29,20 @@ export function PrimarySale({product}: PrimarySale) {
     });
   }
 
-  async function handleBuyNow(product: ProductWithMetadata, quantity?: number) {
+  async function handleBuyNow(product: SimplifiedProduct, quantity?: number) {
     openWidget(WidgetType.SALE, {
       language: 'en',
       environmentId: config[applicationEnvironment].hubEnvironmentId,
-      collectionName: 'CryptoBirds',
-      excludePaymentTypes: [],
+      collectionName: 'Test Collection',
+      excludePaymentTypes: [SalePaymentTypes.CREDIT, SalePaymentTypes.DEBIT],
       excludeFiatCurrencies: [],
       items: [{
         name: product.name,
         description: product.description,
-        productId: product.id.toString(),
+        productId: product.product_id.toString(),
         qty: quantity ?? 1,
-        image: product.metadata!.image
+        image: product!.image,
+        
       }]
     } as SaleWidgetParams)
   }
@@ -53,8 +54,8 @@ export function PrimarySale({product}: PrimarySale) {
           <Heading size="lg">{product.name}</Heading>
           <Flex w={"100%"} flexDir={"row"} justifyContent={"space-between"} alignItems={"center"}> 
           </Flex>
-          {product.metadata?.image && <ChakraImage 
-            src={product.metadata?.image} 
+          {product.image && <ChakraImage 
+            src={product.image} 
             alt="Example Image"
             height={"400px"}
             borderRadius={theme.radii.md}

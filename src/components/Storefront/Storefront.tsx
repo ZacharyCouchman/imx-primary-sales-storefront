@@ -1,8 +1,8 @@
 import { HStack, Spinner, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { PrimarySale } from "../PrimarySale/PrimarySale";
-import { getProducts } from "../../api/getProducts";
-import { ProductWithMetadata } from "../../types/product";
+import { getSimplifiedProducts } from "../../api/getSimplifiedProducts";
+import { SimplifiedProduct } from "../../types/type";
 
 export function Storefront() {
   // Local state
@@ -10,13 +10,13 @@ export function Storefront() {
 
   const toast = useToast();
 
-  const [products, setProducts] = useState<ProductWithMetadata[]>([]);
+  const [products, setProducts] = useState<SimplifiedProduct[]>([]);
 
   useEffect(() => {
     const getStorefrontProducts = async () => {
       setLoading(true);
       try{
-        const storefrontProducts = await getProducts();
+        const storefrontProducts = await getSimplifiedProducts();
         setProducts(storefrontProducts);
       } catch(err) {
         console.log(err);
@@ -36,7 +36,7 @@ export function Storefront() {
   return (
     <HStack justifyContent={'center'} gap={4} flexWrap={'wrap'}>
       {loading && <Spinner />}
-      {!loading && products.length > 0 && products.map((product) => <PrimarySale key={product.id} product={product} />)}
+      {!loading && products.length > 0 && products.map((product) => <PrimarySale key={product.product_id} product={product} />)}
     </HStack>
   );
 }

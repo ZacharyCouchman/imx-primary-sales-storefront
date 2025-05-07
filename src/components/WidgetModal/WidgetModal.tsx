@@ -56,10 +56,10 @@ function WidgetModal({
         connect.addListener(ConnectEventType.SUCCESS, (data: ConnectionSuccess) => {
           onClose();
           connect.unmount();
-          setProvider(data.provider.provider as EIP1193Provider);
+          setProvider(data.provider as EIP1193Provider);
         })
         connect.addListener(ProviderEventType.PROVIDER_UPDATED, (data: ProviderUpdated) => {
-          setProvider(data.provider.provider as EIP1193Provider);
+          setProvider(data.provider as EIP1193Provider);
         })
         // Hack to get to render
         const render = Promise.resolve();

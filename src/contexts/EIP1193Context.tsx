@@ -1,11 +1,7 @@
 import { createContext, useEffect, useState } from "react";
-import { ExternalProvider } from "@ethersproject/providers";
+import { WrappedBrowserProvider } from "@imtbl/sdk/checkout";
 
-export type EIP1193Provider = ExternalProvider & {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  on: (eventType: string, handler: (...args: any) => void) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  removeListener: (eventType: string, handler: (...args: any) => void) => void;
+export type EIP1193Provider = WrappedBrowserProvider & {
   isPassport?: boolean;
 }
 export interface EIP1193ContextState {
@@ -43,11 +39,11 @@ export const EIP1193ContextProvider = ({children}: EIP1193ContextProvider) => {
       return;
     }
     const getProviderDetails = async () => {
-      setChainId(await provider.request!({method: 'eth_chainId'}));
-      setWalletAddress((await provider.request!({method: 'eth_accounts'}))[0].toLowerCase() ?? '')
+      setChainId(await provider.send('eth_chainId', []));
+      setWalletAddress((await provider.send('eth_accounts', []))[0].toLowerCase() ?? '')
     }
     setProvider(provider as EIP1193Provider);
-    setIsPassport(Boolean(provider.isPassport))
+    setIsPassport(Boolean(provider.ethereumProvider?.isPassport))
     getProviderDetails();
   }, [provider]);
 
@@ -62,12 +58,27 @@ export const EIP1193ContextProvider = ({children}: EIP1193ContextProvider) => {
       console.log(accounts);
       setWalletAddress(accounts[0] ?? '');
     }
-    provider.on('chainChanged', setChain);
-    provider.on('accountsChanged', setAccount);
 
+    async function setListeners(provider: EIP1193Provider) {
+      try{
+        provider.ethereumProvider?.on('chainChanged', setChain);
+      } catch(err) {
+        console.error(err)
+      }
+
+      try {
+        provider.ethereumProvider?.on('accountsChanged', setAccount);
+      } catch(err) {
+        console.error(err)
+      }
+
+    }
+
+
+    setListeners(provider);
     return () => {
-      provider.removeListener('chainChanged', setChain);
-      provider.removeListener('accountsChanged', setAccount);
+      provider.ethereumProvider?.removeListener('chainChanged', setChain);
+      provider.ethereumProvider?.removeListener('accountsChanged', setAccount);
     }
   }, [provider])
 

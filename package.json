@@ -14,18 +14,13 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
-    "@imtbl/sdk": "^1.77.5",
+    "@imtbl/sdk": "^2.2.0",
     "bignumber.js": "^4.0.4",
-    "buffer": "^6.0.3",
-    "ethers": "^5.7.2",
+    "ethers": "^6.13.7",
     "framer-motion": "^10.18.0",
-    "jsbi": "^3.2.5",
-    "localforage": "^1.10.0",
-    "match-sorter": "^6.3.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.3",
-    "sort-by": "^1.2.0"
+    "react-router-dom": "^6.22.3"
   },
   "devDependencies": {
     "@types/react": "^18.2.64",
@@ -38,7 +33,6 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "typescript": "^5.2.2",
     "vite": "^5.1.6",
-    "vite-plugin-node-polyfills": "^0.21.0",
     "vite-plugin-svgr": "^4.2.0"
   }
 }
